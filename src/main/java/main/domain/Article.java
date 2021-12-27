@@ -1,13 +1,11 @@
 package main.domain;
 
-import javax.annotation.processing.Generated;
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "posts")
-public class Post {
-    // d.	Postare (titlu, autor, text, data,  subiect)
+@Table(name = "articles")
+public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +30,9 @@ public class Post {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private PostStatus status;
+    private ArticleStatus status;
 
-    public Post() {
+    public Article() {
     }
 
 

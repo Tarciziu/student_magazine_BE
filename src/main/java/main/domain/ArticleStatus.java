@@ -1,5 +1,5 @@
 package main.domain;
 
-public enum PostStatus {
+public enum ArticleStatus {
     APPROVED, PENDING, DECLINED
 }
