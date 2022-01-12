@@ -10,11 +10,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements IUserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserValidator userValidator;
+    Encryptor encryptor;
 
     @Autowired
-    private UserValidator userValidator;
+    UserService(UserRepository userRepository, UserValidator userValidator, Encryptor encryptor){
+        this.userRepository = userRepository;
+        this.userValidator = userValidator;
+        this.encryptor = encryptor;
+    }
 
     @Override
     public String login(String email, String password) {
@@ -27,6 +32,7 @@ public class UserService implements IUserService {
             throw new ServiceException(ServiceException.ErrorCode.VALIDATION, "Email already used");
         }
         ValidationResponse userValidation = userValidator.validate(user);
+        user.setPassword(encryptor.encryptSHA256(user.getPassword()));
         if (userValidation.getIsValid()) {
                 userRepository.save(user);
                 return "Success";
