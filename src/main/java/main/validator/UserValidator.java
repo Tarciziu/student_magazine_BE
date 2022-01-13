@@ -19,7 +19,7 @@ public class UserValidator {
         } else {
             final String nameExpression = "^[A-Z][a-z]*$";
             if (!name.matches(nameExpression)) {
-                this.validationResponse.addMessage("\nWrong " + type +" format: must contain only letters");
+                this.validationResponse.addMessage("\nWrong " + type +" format: must start with capital letter and contain only letters");
             }
         }
     }
