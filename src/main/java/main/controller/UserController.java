@@ -1,8 +1,10 @@
 package main.controller;
 
-import com.google.protobuf.ServiceException;
 import main.controller.request.UserDTO;
+import main.domain.User;
+import main.exception.ServiceException;
 import main.service.IUserService;
+import main.validator.ValidationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,15 @@ public class UserController {
             return ResponseEntity.ok().body(userService.login(userDTO.getEmail(), userDTO.getPassword()));
         } catch (Exception e) { // TODO replace with ServiceException
             return ResponseEntity.status(500).body(e.getMessage()); // TODO replace with ValidationMessage
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok().body(userService.register(user));
+        } catch (ServiceException e) {
+            return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
         }
     }
 }
