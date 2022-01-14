@@ -25,17 +25,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String login(String email, String password) throws Exception {
+    public String login(String email, String password) throws ServiceException {
         // user login
         // TODO maybe you can search for student or admin too. One login function for all roles
         Optional<User> user = userRepository.findById(email);
 
         if (user.isEmpty()) {
-            throw new Exception("Email or password incorrect"); // TODO replace with ServiceException
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "Email or password incorrect");
         }
 
         if (!BCrypt.checkpw(password, user.get().getPassword())) {
-            throw new Exception("Email or password incorrect");
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "Email or password incorrect");
         }
 
         return "Succes";

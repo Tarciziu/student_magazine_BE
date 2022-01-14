@@ -22,8 +22,8 @@ public class UserController {
     ResponseEntity login(@RequestBody UserDTO userDTO) {
         try {
             return ResponseEntity.ok().body(userService.login(userDTO.getEmail(), userDTO.getPassword()));
-        } catch (Exception e) { // TODO replace with ServiceException
-            return ResponseEntity.status(500).body(e.getMessage()); // TODO replace with ValidationMessage
+        } catch (ServiceException e) {
+            return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
         }
     }
 
