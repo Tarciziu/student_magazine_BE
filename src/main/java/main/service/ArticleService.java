@@ -1,6 +1,7 @@
 package main.service;
 
 import main.domain.Article;
+import main.exception.ServiceException;
 import main.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,12 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    public List<Article> getArticlesBySection(String section) {
-        return articleRepository.getArticleBySubject(section);
+    public List<Article> getArticlesBySection(String section) throws ServiceException {
+        List<Article> articles = articleRepository.getArticleBySubject(section);
+
+        if (articles.isEmpty()){
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "No articles available for this section");
+        }
+        return articles;
     }
 }
