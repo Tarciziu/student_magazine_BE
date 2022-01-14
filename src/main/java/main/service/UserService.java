@@ -6,6 +6,7 @@ import main.repository.UserRepository;
 import main.validator.UserValidator;
 import main.validator.ValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,10 +34,11 @@ public class UserService implements IUserService {
             throw new Exception("Email or password incorrect"); // TODO replace with ServiceException
         }
 
-        // TODO check password with BCrypt.checkpw(unencrypted_password, encrypted_password_from_db)
-        // if (BCrypt.checkpw(oldPassword, user.getPassword()))
+        if (!BCrypt.checkpw(password, user.get().getPassword())) {
+            throw new Exception("Email or password incorrect");
+        }
 
-        return null;
+        return "Succes";
     }
 
     @Override
