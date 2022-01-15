@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class Student {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "user", referencedColumnName = "email")
     private String email;
 

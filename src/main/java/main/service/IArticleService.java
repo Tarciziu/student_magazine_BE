@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IArticleService {
     List<Article> getArticlesBySection(String section) throws ServiceException;
+    Article getArticleById(String idStr) throws ServiceException;
 }
