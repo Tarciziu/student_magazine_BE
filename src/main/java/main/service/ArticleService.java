@@ -1,5 +1,6 @@
 package main.service;
 
+import main.controller.response.ArticleResponse;
 import main.domain.*;
 import main.controller.request.ArticleDTO;
 import main.exception.ServiceException;
@@ -23,6 +24,7 @@ public class ArticleService implements IArticleService {
     private UserRepository userRepository;
     private StudentRepository studentRepository;
     private AdministratorRepository administratorRepository;
+
     @Autowired
     public ArticleService(ArticleRepository articleRepository,UserRepository userRepository,StudentRepository studentRepository,AdministratorRepository administratorRepository) throws ServiceException {
         this.articleRepository = articleRepository;
@@ -42,7 +44,7 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    public Article getArticleById(String idStr) throws ServiceException {
+    public ArticleResponse getArticleById(String idStr) throws ServiceException {
         Long id;
 
         try{
@@ -57,7 +59,13 @@ public class ArticleService implements IArticleService {
             throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "Invalid article id");
         }
 
-        return article.get();
+        ArticleResponse articleResponse = new ArticleResponse();
+        articleResponse.setDate(article.get().getDate());
+        articleResponse.setAuthorName(article.get().getAuthor().getFirstName() + " " + article.get().getAuthor().getLastName());
+        articleResponse.setText(article.get().getText());
+        articleResponse.setTitle(article.get().getTitle());
+
+        return articleResponse;
     }
 
     public String addArticle(ArticleDTO articleDTO) throws ServiceException {

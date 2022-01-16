@@ -13,9 +13,6 @@ public class Student {
     @OneToOne
     @JoinColumn(name = "email", referencedColumnName = "email")
     private User user;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "user", referencedColumnName = "email")
-    private String email;
 
     @Column(name = "university")
     private String university;

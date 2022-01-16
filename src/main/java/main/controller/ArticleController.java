@@ -22,7 +22,7 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    @GetMapping("/{section}")
+    @GetMapping("/section/{section}")
     ResponseEntity getArticlesBySection(@PathVariable String section) {
         try {
             return ResponseEntity.ok().body(articleService.getArticlesBySection(section));
@@ -45,8 +45,7 @@ public class ArticleController {
     @GetMapping("/{id}")
     ResponseEntity getArticleById(@PathVariable String id) {
         try {
-            Article article = articleService.getArticleById(id);
-            return ResponseEntity.ok().body(article);
+            return ResponseEntity.ok().body(articleService.getArticleById(id));
         } catch (ServiceException e) {
             System.out.println("Except");
             return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
