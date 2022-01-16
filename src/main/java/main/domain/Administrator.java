@@ -5,23 +5,31 @@ import javax.persistence.*;
 @Entity
 @Table(name = "administrators")
 public class Administrator {
-
     @Id
-    @JoinColumn(name = "user", referencedColumnName = "email")
-    private String email;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "email", referencedColumnName = "email")
+    private User user;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Administrator() {
     }
 
-    public Administrator(String email) {
-        this.email = email;
+    public User getUser() {
+        return user;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
