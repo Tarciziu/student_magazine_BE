@@ -1,5 +1,6 @@
 package main.service;
 
+import main.controller.response.ArticleResponse;
 import main.domain.*;
 import main.controller.request.ArticleDTO;
 import main.exception.ServiceException;
@@ -23,15 +24,14 @@ public class ArticleService implements IArticleService {
     private UserRepository userRepository;
     private StudentRepository studentRepository;
     private AdministratorRepository administratorRepository;
+
     @Autowired
     public ArticleService(ArticleRepository articleRepository,UserRepository userRepository,StudentRepository studentRepository,AdministratorRepository administratorRepository) throws ServiceException {
         this.articleRepository = articleRepository;
         this.userRepository=userRepository;
         this.studentRepository=studentRepository;
         this.administratorRepository=administratorRepository;
-/*
-        addArticle(new ArticleDTO("string","string","string","b"));*/
-    }
+   }
 
     @Override
     public List<Article> getArticlesBySection(String section) throws ServiceException {
@@ -41,6 +41,31 @@ public class ArticleService implements IArticleService {
             throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "No articles available for this section");
         }
         return articles;
+    }
+
+    @Override
+    public ArticleResponse getArticleById(String idStr) throws ServiceException {
+        Long id;
+
+        try{
+            id = Long.parseLong(idStr);
+        } catch(Exception e) {
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "Invalid article id");
+        }
+
+        Optional<Article> article = articleRepository.findById(id);
+
+        if (article.isEmpty()) {
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "Invalid article id");
+        }
+
+        ArticleResponse articleResponse = new ArticleResponse();
+        articleResponse.setDate(article.get().getDate());
+        articleResponse.setAuthorName(article.get().getAuthor().getFirstName() + " " + article.get().getAuthor().getLastName());
+        articleResponse.setText(article.get().getText());
+        articleResponse.setTitle(article.get().getTitle());
+
+        return articleResponse;
     }
 
     public String addArticle(ArticleDTO articleDTO) throws ServiceException {
