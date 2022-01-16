@@ -1,4 +1,4 @@
-package main.domain.dto;
+package main.controller.request;
 
 import main.domain.Student;
 
@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 public class ArticleDTO {
 
 
-    private Integer id;
     @NotNull
     private String title;
     @NotNull
@@ -19,29 +18,16 @@ public class ArticleDTO {
 
     @NotNull
     private String author;
-    @NotNull
-    private String status;
 
-    public ArticleDTO(Integer id, @NotNull String title, @NotNull String text, @NotNull String subject, @NotNull String author, @NotNull String status) {
-        this.id = id;
+
+    public ArticleDTO(@NotNull String title, @NotNull String text, @NotNull String subject, @NotNull String author) {
         this.title = title;
         this.text = text;
         this.subject = subject;
         this.author = author;
-        this.status = status;
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getTitle() {
         return title;
@@ -64,9 +50,6 @@ public class ArticleDTO {
     public ArticleDTO() {
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public void setTitle(String title) {
         this.title = title;

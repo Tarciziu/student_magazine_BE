@@ -1,10 +1,9 @@
 package main.service;
 
-import main.domain.Article;
-import main.domain.Student;
-import main.domain.User;
-import main.domain.dto.ArticleDTO;
+import main.domain.*;
+import main.controller.request.ArticleDTO;
 import main.exception.ServiceException;
+import main.repository.AdministratorRepository;
 import main.repository.ArticleRepository;
 import main.repository.StudentRepository;
 import main.repository.UserRepository;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +22,15 @@ public class ArticleService implements IArticleService {
     private ArticleRepository articleRepository;
     private UserRepository userRepository;
     private StudentRepository studentRepository;
+    private AdministratorRepository administratorRepository;
     @Autowired
-    public ArticleService(ArticleRepository articleRepository,UserRepository userRepository,StudentRepository studentRepository) throws ServiceException {
+    public ArticleService(ArticleRepository articleRepository,UserRepository userRepository,StudentRepository studentRepository,AdministratorRepository administratorRepository) throws ServiceException {
         this.articleRepository = articleRepository;
         this.userRepository=userRepository;
         this.studentRepository=studentRepository;
-        addArticle(new ArticleDTO(0,"a","b","c","d","r"));
+        this.administratorRepository=administratorRepository;
+/*
+        addArticle(new ArticleDTO("string","string","string","b"));*/
     }
 
     @Override
@@ -43,22 +44,23 @@ public class ArticleService implements IArticleService {
     }
 
     @Transactional
-    public ArticleDTO addArticle(ArticleDTO articleDTO) throws ServiceException {
-        Optional<User> user=userRepository.findById(articleDTO.getAuthor());
+    public String addArticle(ArticleDTO articleDTO) throws ServiceException {
+        User user=userRepository.getByEmail(articleDTO.getAuthor());
         Article a;
-        if(user.isEmpty()){
-            throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Invalid e-mail");
-        }
         Date date=Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        Optional<Student> student=studentRepository.findById(user.get().getEmail());
-        if(student.isEmpty()){
-            throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Invalid e-mail");
+        Optional<Student> student=studentRepository.findByUser(user);
+        if(student.isPresent()){
+            a=new Article(articleDTO.getTitle(), articleDTO.getText(),sqlDate,articleDTO.getSubject(),user, ArticleStatus.PENDING);
+            articleRepository.save(a);
+            return "Succes";
         }
-
-/*            a=new Article(articleDTO.getTitle(), articleDTO.getText(),sqlDate,articleDTO.getSubject(),articleDTO.getAuthor())*/
-
-
-        return articleDTO;
+        Optional<Administrator> administrator=administratorRepository.findByUser(user);
+        if(administrator.isPresent()){
+            a = new Article(articleDTO.getTitle(), articleDTO.getText(), sqlDate, articleDTO.getSubject(), user, ArticleStatus.APPROVED);
+            articleRepository.save(a);
+            return "Succes";
+        }
+        throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Invalid e-mail");
     }
 }
