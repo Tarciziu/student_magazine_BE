@@ -1,10 +1,12 @@
 package main.controller;
 
 import main.domain.Article;
+import main.exception.ServiceException;
 import main.domain.dto.ArticleDTO;
 import main.exception.ServiceException;
 import main.service.ArticleService;
 import main.service.IArticleService;
+import main.validator.ValidationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +25,12 @@ public class ArticleController {
     }
 
     @GetMapping("/{section}")
-    ResponseEntity<List<Article>> getArticlesBySection(@PathVariable String section) throws ServiceException {
-        return ResponseEntity.ok().body(articleService.getArticlesBySection(section));
+    ResponseEntity getArticlesBySection(@PathVariable String section) {
+        try {
+            return ResponseEntity.ok().body(articleService.getArticlesBySection(section));
+        } catch(ServiceException e) {
+            return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
+        }
     }
 
     @GetMapping("/create")

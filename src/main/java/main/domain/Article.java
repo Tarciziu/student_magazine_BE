@@ -24,9 +24,9 @@ public class Article {
     @Column(name = "subject")
     private String subject;
 
-    @JoinColumn(name = "students",  referencedColumnName = "email")
+    @JoinColumn(name = "user",  referencedColumnName = "email")
     @ManyToOne
-    private Student author;
+    private User author;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -84,11 +84,11 @@ public class Article {
         this.subject = subject;
     }
 
-    public Student getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(Student author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 
