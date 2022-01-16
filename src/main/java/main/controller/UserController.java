@@ -1,6 +1,7 @@
 package main.controller;
 
 import main.controller.request.UserDTO;
+import main.controller.response.UserRoleDTO;
 import main.domain.User;
 import main.exception.ServiceException;
 import main.service.IUserService;
@@ -21,7 +22,8 @@ public class UserController {
     @PostMapping("/login")
     ResponseEntity login(@RequestBody UserDTO userDTO) {
         try {
-            return ResponseEntity.ok().body(userService.login(userDTO.getEmail(), userDTO.getPassword()));
+            return ResponseEntity.ok().body(new UserRoleDTO(userDTO.getEmail(),
+                    userService.login(userDTO.getEmail(), userDTO.getPassword())));
         } catch (ServiceException e) {
             return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
         }

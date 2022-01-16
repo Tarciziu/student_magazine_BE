@@ -1,7 +1,10 @@
 package main.service;
 
+import main.domain.Student;
 import main.domain.User;
 import main.exception.ServiceException;
+import main.repository.AdministratorRepository;
+import main.repository.StudentRepository;
 import main.repository.UserRepository;
 import main.validator.UserValidator;
 import main.validator.ValidationResponse;
@@ -13,21 +16,25 @@ import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
+    private final StudentRepository studentRepository;
     private final UserRepository userRepository;
+    private final AdministratorRepository administratorRepository;
     private final UserValidator userValidator;
     Encryptor encryptor;
 
     @Autowired
-    UserService(UserRepository userRepository, UserValidator userValidator, Encryptor encryptor){
+    UserService(UserRepository userRepository, UserValidator userValidator,
+                StudentRepository studentRepository, AdministratorRepository administratorRepository,
+                Encryptor encryptor){
         this.userRepository = userRepository;
+        this.studentRepository = studentRepository;
+        this.administratorRepository = administratorRepository;
         this.userValidator = userValidator;
         this.encryptor = encryptor;
     }
 
     @Override
     public String login(String email, String password) throws ServiceException {
-        // user login
-        // TODO maybe you can search for student or admin too. One login function for all roles
         Optional<User> user = userRepository.findById(email);
 
         if (user.isEmpty()) {
@@ -38,7 +45,15 @@ public class UserService implements IUserService {
             throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "Email or password incorrect");
         }
 
-        return "Succes";
+        if (studentRepository.findByUser(user.get()).isPresent()){
+            return "Student";
+        }
+
+        if (administratorRepository.findByUser(user.get()).isPresent()){
+            return "Administrator";
+        }
+
+        return "User";
     }
 
     @Override
