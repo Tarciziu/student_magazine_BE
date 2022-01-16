@@ -5,8 +5,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "students")
 public class Student {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "email", referencedColumnName = "email")
+    private User user;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "user", referencedColumnName = "email")
     private String email;
@@ -14,20 +20,28 @@ public class Student {
     @Column(name = "university")
     private String university;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Student() {
     }
 
-    public Student(String email, String university) {
-        this.email = email;
+    public Student(User user, String university) {
+        this.user = user;
         this.university = university;
     }
 
-    public String getEmail() {
-        return email;
+    public User getUser() {
+        return user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getUniversity() {
