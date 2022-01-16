@@ -43,24 +43,27 @@ public class ArticleService implements IArticleService {
         return articles;
     }
 
-    @Transactional
     public String addArticle(ArticleDTO articleDTO) throws ServiceException {
-        User user=userRepository.getByEmail(articleDTO.getAuthor());
+        User user = userRepository.getByEmail(articleDTO.getAuthor());
         Article a;
-        Date date=Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        Optional<Student> student=studentRepository.findByUser(user);
+        Optional<Student> student = studentRepository.findByUser(user);
+
         if(student.isPresent()){
-            a=new Article(articleDTO.getTitle(), articleDTO.getText(),sqlDate,articleDTO.getSubject(),user, ArticleStatus.PENDING);
+            a = new Article(articleDTO.getTitle(), articleDTO.getText(),sqlDate,articleDTO.getSubject(),user, ArticleStatus.PENDING);
             articleRepository.save(a);
             return "Succes";
         }
-        Optional<Administrator> administrator=administratorRepository.findByUser(user);
+
+        Optional<Administrator> administrator = administratorRepository.findByUser(user);
+
         if(administrator.isPresent()){
             a = new Article(articleDTO.getTitle(), articleDTO.getText(), sqlDate, articleDTO.getSubject(), user, ArticleStatus.APPROVED);
             articleRepository.save(a);
             return "Succes";
         }
+
         throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Invalid e-mail");
     }
 }
