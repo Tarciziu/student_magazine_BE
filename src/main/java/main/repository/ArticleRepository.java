@@ -10,4 +10,5 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "SELECT a FROM Article a WHERE (a.status = 'APPROVED') ORDER BY a.id DESC")
     List<Article> getArticleBySubject(String subject);
+
 }

@@ -47,6 +47,15 @@ public class Article {
         return title;
     }
 
+    public Article(String title, String text, Date date, String subject, Student author) {
+        this.title = title;
+        this.text = text;
+        this.date = date;
+        this.subject = subject;
+        this.author = author;
+
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
