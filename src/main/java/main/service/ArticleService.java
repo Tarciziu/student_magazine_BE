@@ -40,8 +40,6 @@ public class ArticleService implements IArticleService {
 
         Optional<Article> article = articleRepository.findById(id);
 
-        System.out.println(article);
-
         if (article.isEmpty()) {
             throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "Invalid article id");
         }
