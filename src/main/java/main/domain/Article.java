@@ -35,6 +35,7 @@ public class Article {
     public Article() {
     }
 
+
     public Long getId() {
         return id;
     }
@@ -45,6 +46,16 @@ public class Article {
 
     public String getTitle() {
         return title;
+    }
+
+    public Article(String title, String text, Date date, String subject, User author,ArticleStatus articleStatus) {
+        this.title = title;
+        this.text = text;
+        this.date = date;
+        this.subject = subject;
+        this.author = author;
+        this.status=articleStatus;
+
     }
 
     public void setTitle(String title) {

@@ -1,15 +1,13 @@
 package main.controller;
 
-import main.domain.Article;
 import main.exception.ServiceException;
-import main.service.ArticleService;
+import main.controller.request.ArticleDTO;
 import main.service.IArticleService;
 import main.validator.ValidationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/articles")
@@ -29,4 +27,18 @@ public class ArticleController {
             return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
         }
     }
+
+    @PostMapping("/create")
+    public ResponseEntity createArticle(@RequestBody ArticleDTO article) throws ServiceException {
+
+        try {
+            return ResponseEntity.ok().body(articleService.addArticle(article));
+        }
+        catch(ServiceException e){
+            return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
+        }
+    }
+
+
+
 }
