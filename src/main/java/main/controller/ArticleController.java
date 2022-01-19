@@ -2,6 +2,7 @@ package main.controller;
 
 import main.domain.Article;
 import main.exception.ServiceException;
+import main.mapper.Mapper;
 import main.service.ArticleService;
 import main.exception.ServiceException;
 import main.controller.request.ArticleDTO;
@@ -12,20 +13,28 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/articles")
+@CrossOrigin
 public class ArticleController {
     IArticleService articleService;
+    Mapper mapper;
 
     @Autowired
-    public ArticleController(IArticleService articleService) {
+    public ArticleController(IArticleService articleService, Mapper mapper) {
         this.articleService = articleService;
+        this.mapper = mapper;
     }
 
     @GetMapping("/section/{section}")
     ResponseEntity getArticlesBySection(@PathVariable String section) {
         try {
-            return ResponseEntity.ok().body(articleService.getArticlesBySection(section));
+            return ResponseEntity.ok().body(
+                    articleService.getArticlesBySection(section).stream()
+                            .map(article -> mapper.convertToArticleDTO(article)).collect(Collectors.toList())
+                    );
         } catch(ServiceException e) {
             return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
         }
