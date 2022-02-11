@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,7 @@ public class ArticleService implements IArticleService {
         this.userRepository=userRepository;
         this.studentRepository=studentRepository;
         this.administratorRepository=administratorRepository;
+
    }
 
     @Override
@@ -91,4 +93,23 @@ public class ArticleService implements IArticleService {
 
         throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Invalid e-mail");
     }
+
+    @Override
+    public List<Article> getLatestArticles(int n) throws  ServiceException{
+        List<Article> articles=articleRepository.getLatestArticle();
+        int NrArticole=articles.size();
+        if(NrArticole<n)
+        {
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Numarul articolelor APPROVED este mai mic decat numarul dat ");
+        }
+        if(NrArticole==0){
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Nu exista niciun articol APPROVED");
+        }
+        else {
+            return articleRepository.getLatestArticle().subList(0,n);
+        }
+
+        }
+
+
 }

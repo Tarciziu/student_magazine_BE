@@ -40,6 +40,18 @@ public class ArticleController {
         }
     }
 
+    @GetMapping("/latest/{n}")
+    ResponseEntity getLatestArticles(@PathVariable int n) {
+        try {
+            return ResponseEntity.ok().body(
+                    articleService.getLatestArticles(n).stream()
+                            .map(article -> mapper.convertToArticleDTO(article)).collect(Collectors.toList())
+            );
+        } catch(ServiceException e) {
+            return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity createArticle(@RequestBody ArticleDTO article) throws ServiceException {
 
