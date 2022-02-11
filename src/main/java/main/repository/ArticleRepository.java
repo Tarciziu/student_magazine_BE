@@ -11,4 +11,7 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "SELECT a FROM Article a WHERE (a.status = 'APPROVED' AND a.subject = :subject) ORDER BY a.id DESC")
     List<Article> getArticleBySubject(@Param("subject") String subject);
+
+    @Query(value="SELECT a FROM Article a WHERE (a.status='APPROVED') ORDER BY a.id DESC")
+    List<Article> getLatestArticle();
 }
