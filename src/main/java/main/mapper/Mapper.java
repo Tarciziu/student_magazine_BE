@@ -16,6 +16,7 @@ public class Mapper {
 
     public ArticleResponse convertToArticleDTO(Article article) {
         ArticleResponse response = new ArticleResponse();
+        response.setId(article.getId());
         response.setTitle(article.getTitle());
         response.setText(article.getText());
         response.setAuthorName(article.getAuthor().getFirstName() + " " + article.getAuthor().getLastName());
