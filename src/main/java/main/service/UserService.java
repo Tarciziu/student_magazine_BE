@@ -57,6 +57,17 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User getByEmail(String email) throws ServiceException {
+        Optional<User> user = userRepository.findById(email);
+
+        if (user.isEmpty()) {
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL, "Invalid email");
+        }
+
+        return user.get();
+    }
+
+    @Override
     public String register(User user) throws ServiceException {
         if (userRepository.findById(user.getEmail()).isPresent()) {
             throw new ServiceException(ServiceException.ErrorCode.VALIDATION, "Email already used");
@@ -70,4 +81,6 @@ public class UserService implements IUserService {
             throw new ServiceException(ServiceException.ErrorCode.VALIDATION, userValidation.getMessages().toString());
         }
     }
+
+
 }
