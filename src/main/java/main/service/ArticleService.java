@@ -91,4 +91,14 @@ public class ArticleService implements IArticleService {
 
         throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Invalid e-mail");
     }
+
+    @Override
+    public String approveArticle(int n) throws ServiceException {
+        Optional<Article> articol=articleRepository.findById((long) n);
+        if(articol.isPresent() && articol.get().getStatus().equals(ArticleStatus.PENDING)){
+            articleRepository.approveArticle(n);
+            return "S-a efectuat update-ul";
+        }
+        throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Articol invalid");
+    }
 }

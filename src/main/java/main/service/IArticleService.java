@@ -11,4 +11,5 @@ public interface IArticleService {
     List<Article> getArticlesBySection(String section) throws ServiceException;
     ArticleResponse getArticleById(String idStr) throws ServiceException;
     String addArticle(ArticleDTO article) throws ServiceException;
+    String approveArticle(int n) throws ServiceException;
 }
