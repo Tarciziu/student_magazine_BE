@@ -13,4 +13,5 @@ public interface IArticleService {
     ArticleResponse getArticleById(String idStr) throws ServiceException;
 
     String addArticle(ArticleDTO article) throws ServiceException;
+    String approveArticle(int n) throws ServiceException;
 }

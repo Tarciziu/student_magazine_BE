@@ -63,6 +63,18 @@ public class ArticleController {
         }
     }
 
+    @PostMapping("/approve")
+    public ResponseEntity approveArticle(@RequestBody int n) throws ServiceException{
+
+
+        try{
+            return ResponseEntity.ok().body(articleService.approveArticle(n));
+        }
+        catch(ServiceException e){
+            return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
+        }
+    }
+
     @GetMapping("/{id}")
     ResponseEntity getArticleById(@PathVariable String id) {
         try {
