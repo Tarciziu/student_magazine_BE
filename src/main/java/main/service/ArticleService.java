@@ -62,6 +62,7 @@ public class ArticleService implements IArticleService {
         }
 
         ArticleResponse articleResponse = new ArticleResponse();
+        articleResponse.setId(article.get().getId());
         articleResponse.setDate(article.get().getDate());
         articleResponse.setAuthorName(article.get().getAuthor().getFirstName() + " " + article.get().getAuthor().getLastName());
         articleResponse.setText(article.get().getText());
