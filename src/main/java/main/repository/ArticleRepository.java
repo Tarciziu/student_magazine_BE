@@ -17,4 +17,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Modifying
     @Query(value="UPDATE Article a SET a.status='APPROVED' WHERE a.id=?1")
     void approveArticle(long n);
+
+    @Query(value="SELECT a FROM Article a WHERE (a.status='APPROVED') ORDER BY a.id DESC")
+    List<Article> getLatestArticle();
 }

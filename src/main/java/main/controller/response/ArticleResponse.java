@@ -4,6 +4,7 @@ package main.controller.response;
 import java.util.Date;
 
 public class ArticleResponse {
+    Long id;
     String title;
     String authorName;
     String text;
@@ -12,11 +13,19 @@ public class ArticleResponse {
     public ArticleResponse() {
     }
 
-    public ArticleResponse(String title, String authorName, String text, Date date) {
+    public ArticleResponse(Long id, String title, String authorName, String text, Date date) {
         this.title = title;
         this.authorName = authorName;
         this.text = text;
         this.date = date;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {

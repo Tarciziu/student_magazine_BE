@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +61,7 @@ public class ArticleService implements IArticleService {
         }
 
         ArticleResponse articleResponse = new ArticleResponse();
+        articleResponse.setId(article.get().getId());
         articleResponse.setDate(article.get().getDate());
         articleResponse.setAuthorName(article.get().getAuthor().getFirstName() + " " + article.get().getAuthor().getLastName());
         articleResponse.setText(article.get().getText());
@@ -91,6 +93,25 @@ public class ArticleService implements IArticleService {
 
         throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Invalid e-mail");
     }
+
+    @Override
+    public List<Article> getLatestArticles(int n) throws  ServiceException{
+        List<Article> articles=articleRepository.getLatestArticle();
+        int NrArticole=articles.size();
+        if(NrArticole<n)
+        {
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Numarul articolelor APPROVED este mai mic decat numarul dat ");
+        }
+        if(NrArticole==0){
+            throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Nu exista niciun articol APPROVED");
+        }
+        else {
+            return articleRepository.getLatestArticle().subList(0,n);
+        }
+
+        }
+
+
 
     @Override
     public String approveArticle(int n) throws ServiceException {
