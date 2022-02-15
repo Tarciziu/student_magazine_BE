@@ -23,15 +23,17 @@ public class Comment {
     private Article article;
     @Column(name = "date")
     private Date date;
+    @Column(name="text")
+    private String text;
 
     public Comment() {
 
     }
-    public Comment(Long id, User user, Article article, Date date) {
-        this.id = id;
+    public Comment(User user, Article article, Date date,String text) {
         this.user = user;
         this.article = article;
         this.date = date;
+        this.text=text;
     }
 
     public Long getId() {
@@ -44,6 +46,13 @@ public class Comment {
 
     public User getUser() {
         return user;
+    }
+    public String getText(){
+        return text;
+    }
+
+    void  setText(){
+        this.text=text;
     }
 
     public Article getArticle() {
