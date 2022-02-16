@@ -1,8 +1,10 @@
 package main.mapper;
 
 import main.controller.response.ArticleResponse;
+import main.controller.response.CommentResponse;
 import main.controller.response.UserProfileDTO;
 import main.domain.Article;
+import main.domain.Comment;
 import main.domain.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,15 @@ public class Mapper {
         dto.setLastName(user.getLastName());
         dto.setBirthDate(user.getBirthDate());
 
+        return dto;
+    }
+
+    public CommentResponse convertToCommentDTO(Comment comment)
+    {
+        CommentResponse dto=new CommentResponse();
+        dto.setAutor(comment.getUser().getFirstName()+comment.getUser().getLastName());
+        dto.setDate(comment.getDate());
+        dto.setText(comment.getText());
         return dto;
     }
 

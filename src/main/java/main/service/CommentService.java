@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentService implements ICommentService{
@@ -50,5 +52,21 @@ public class CommentService implements ICommentService{
         {
             throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Nu a reusit adaugarea");
         }
+    }
+
+    @Override
+    public List<Comment> getCommentsByArticle(int n) throws ServiceException {
+        Optional<Article> a=articleRepository.findById((long) n);
+        if(a.isPresent())
+        {
+            List<Comment> list=commentRepository.getCommentByArticle((long)n);
+            if(list.size()!=0)
+                return list;
+            else
+                {
+                    throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"Articolul nu are comentarii");
+                }
+        }
+        throw new ServiceException(ServiceException.ErrorCode.INTERNAL,"ID-ul articolului este gresit");
     }
 }
