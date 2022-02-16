@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/comments")
 @CrossOrigin
@@ -18,8 +20,9 @@ public class CommentController {
     Mapper mapper;
 
     @Autowired
-    public CommentController(ICommentService commentService)
+    public CommentController(ICommentService commentService,  Mapper mapper)
     {
+        this.mapper=mapper;
         this.commentService=commentService;
     }
 
@@ -33,5 +36,20 @@ public class CommentController {
             return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
         }
     }
+
+
+    @GetMapping("/article/{n}")
+    ResponseEntity getCommentsByArticle(@PathVariable int n) {
+        try {
+            return ResponseEntity.ok().body(
+                    commentService.getCommentsByArticle(n).stream()
+                            .map(comment -> mapper.convertToCommentDTO(comment)).collect(Collectors.toList())
+            );
+        } catch(ServiceException e) {
+            return ResponseEntity.status(500).body(new ValidationMessage(e.getMessage()));
+        }
+    }
+
+
 
 }
